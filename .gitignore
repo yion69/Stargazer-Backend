@@ -1,0 +1,28 @@
+# Python bytecode and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Environment variables and sensitive data
+.env
+.flaskenv
+
+# Logs and temporary files
+*.log
+/logs/
+tmp/
+*.tmp
+
+# Test artifacts (e.g., pytest cache)
+.pytest_cache/
+.coverage
+htmlcov/
