@@ -1,6 +1,6 @@
+from flask import current_app
 from http import HTTPStatus
 from flask import current_app
-from app import supabase_client
 from postgrest.exceptions import APIError
 from utils.exceptions import NotFoundError
 from models.item_model import ItemModelFull
@@ -18,7 +18,7 @@ class ItemService:
                 'item_sold': sold,
                 'item_images': images,
             }
-            response = supabase_client.table('clothing_item').insert(data).execute()
+            response = current_app.supabase.table('clothing_item').insert(data).execute()
             if response.data:
                 return ItemModelFull(**response.data[0]).model_dump()
         except Exception as err:
@@ -31,10 +31,10 @@ class ItemService:
     @staticmethod
     def get_all_item():
         try:           
-            response = supabase_client.table('clothing_item').select('*').execute()
+            response = current_app.supabase.table('clothing_item').select('*').execute()
             if not response.data:
                 raise APIError
-            validated_items = [ItemModelFull(**response.data).model_dump for item in response.datta]
+            validated_items = [ItemModelFull(**item).model_dump() for item in response.data]
             return validated_items   
         except Exception as err:
             print(f'Error Occured : ErrorCode {err}')
@@ -50,7 +50,7 @@ class ItemService:
     @staticmethod
     def get_single_item(item_id: str):
         try:        
-            response = supabase_client.table('clothing_item').select('*').eq('item_id', item_id).single().execute()
+            response = current_app.supabase.table('clothing_item').select('*').eq('item_id', item_id).single().execute()
 
             if response.data:
                 return ItemModelFull(**response.data).model_dump()
@@ -68,7 +68,7 @@ class ItemService:
     @staticmethod
     def delete_item(item_id: str):
         try: 
-            response = supabase_client.table('clothing_item').delete().eq('item_id', item_id).execute()
+            response = current_app.supabase.table('clothing_item').delete().eq('item_id', item_id).execute()
             return response.data
         except Exception as err: 
             print(f'Error Occured : ErrorCode {err}')
