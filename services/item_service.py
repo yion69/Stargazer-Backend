@@ -31,7 +31,7 @@ class ItemService:
     @staticmethod
     def get_all_item():
         try:           
-            response = current_app.supabase.table('clothing_item').select('*').execute()
+            response = current_app.supabase.table('clothing_item').select('*').order('item_brand', desc=True).execute()
             if not response.data:
                 raise APIError
             validated_items = [ItemModelFull(**item).model_dump() for item in response.data]

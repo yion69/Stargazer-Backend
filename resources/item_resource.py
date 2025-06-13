@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint, jsonify, current_app, request
 from flask_restful import Api, Resource
 from services.item_service import ItemService
 
@@ -16,20 +16,42 @@ class ItemResource(Resource):
     
     def post(self):
         try:
-            item = ItemService.create_item('johndoe', 2002, 'johneldenring', 69.9, 69, {})
+            if not request.is_json:
+                current_app.logger.warning("Attempted POST without JSON content type.")
+                return {"message": "Request must be JSON", "error": "Content-Type must be application/json"}, 400
+            
+            data = request.get_json()
+
+            image_1 = data.get('image_1')
+            image_2 = data.get('image_2')
+            name = data.get('heading')
+            brand = data.get('subheading')
+            price = data.get('price')
+
+            item = ItemService.create_item(
+                name,
+                price, 
+                brand, 
+                4.69, 
+                69, 
+                [
+                    image_1, 
+                    image_2
+                ]
+            )
             return jsonify(item)
         except Exception as err:
             current_app.logger.error(f"Error Occured : ErrorCode {err}")
-            raise
+            return {"message": "idk man", "error": str(err)}, 400
 
 class ItemSingleResource(Resource): 
     def get(self, item_id):
         try:
-            item = ItemService.get_single_item(item_id)
+            item = ItemService.get_single_item(item_id);
             return jsonify(item)
         except Exception as err:
-            current_app.logger.error(f'Error Occured : ErrorCode {err}')
-            raise
+            current_app.logger.error(f"Error Occured : ErrorCode {err}")
+            return {"message": "idk man", "error": str(err)}, 400
 
     def delete(self, item_id):
         try:

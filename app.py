@@ -3,6 +3,7 @@ from config import Config
 from supabase import create_client, Client
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -10,6 +11,8 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173"], supports_credentials=True)
 
     app.logger.info(f"Supabase client initialzed with URL ==> {Config.SUPABASE_URL}")
 
