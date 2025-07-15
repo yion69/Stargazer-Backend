@@ -34,7 +34,7 @@ class ItemResource(Resource):
                 brand, 
                 4.69, 
                 69, 
-                [
+                [   
                     image_1, 
                     image_2
                 ]

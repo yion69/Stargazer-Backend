@@ -1,4 +1,4 @@
-import secrets
+import secrets      
 from datetime import datetime, timezone
 from supabase import Client as SupabaseClient
 from authlib.integrations.flask_client import OAuth
@@ -16,6 +16,7 @@ class GoogleAuthService:
         pass
 
     def initiate_google_login(self):
+        session.clear();
         redirect_uri = url_for('google_auth.googleauthcallbackresource', _external=True)
         nonce = secrets.token_urlsafe(32)
         session['oauth_nonce'] = nonce
@@ -25,9 +26,13 @@ class GoogleAuthService:
         try:
             token = self.google_oauth_client.authorize_access_token()
             expected_nonce = session.pop('oauth_nonce', None)
+
+            print("this is nonce from session ==> ",expected_nonce); 
+
             if not expected_nonce:
                 current_app.logger.error("Error: OAuth nonce not found in session or already used.")
                 return redirect(url_for('google_auth.login_failed_route'))
+            
             user_google_info = self.google_oauth_client.parse_id_token(token, nonce=expected_nonce)
 
             user_email = user_google_info.get('email')

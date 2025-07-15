@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -15,3 +16,6 @@ class Config:
 
     SUPABASE_TABLE_ITEM=os.environ.get('SUPABASE_TABLE_ITEM')
     SUPABASE_TABLE_USER=os.environ.get('SUPABASE_TABLE_USER')
+
+    JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY')
+    JWT_ALGORITHM='HS256'
