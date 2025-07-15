@@ -38,7 +38,6 @@ class AuthLoginResource(Resource):
             password = data.get('password')
 
             response = self.AuthService.initiate_login(email=email, password=password);
-            # response = self.AuthService.initiate_login(email='thutanaing.personal@gmail.com', password='eatshit');
 
             return {
                 'message': 'Authentication Successful',
